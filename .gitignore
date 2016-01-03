@@ -1,0 +1,4 @@
+*.pyc
+
+gitloc.egg-info
+venv
