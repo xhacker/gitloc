@@ -6,6 +6,7 @@ setup(
     name="gitloc",
     version="0.1",
     packages=find_packages(),
+    install_requires=['pygit2>=0.23.3', 'pyprind>=2.9.2'],
     entry_points={
         "console_scripts": [
             "gitloc = gitloc.__main__:main",
