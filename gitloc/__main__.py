@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """The main entry point. Invoke as `gitloc' or `python -m gitloc'.
 """
 import sys
@@ -35,6 +36,11 @@ def main():
         # Skip commits not in 2015
         year = datetime.fromtimestamp(commit.commit_time).year
         if year != 2015:
+            bar.update()
+            continue
+
+        # Skip commits by other authors
+        if commit.author.name not in [u'LIU Dongyuan / 柳东原', 'Xhacker Liu']:
             bar.update()
             continue
 
