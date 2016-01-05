@@ -53,24 +53,32 @@ def main():
         else:
             diff = commit.tree.diff_to_tree(swap=True)
 
+        commit_insertions = 0
+        commit_deletions = 0
+
         for patch in diff:
+            # Skip binary
+            if patch.delta.is_binary:
+                continue
+
             old_path = patch.delta.old_file.path
             new_path = patch.delta.new_file.path
 
             # Ignore files with certain pattern
-            regexp = r'^Pods'
+            regexp = r'.*Pods.*|.*xcassets.*|.*\.framework.*|.*node_modules.*'
             if re.match(regexp, old_path) or re.match(regexp, new_path):
                 continue
 
-            insertions = patch.line_stats[1]
-            deletions = patch.line_stats[2]
-            total_insertions += insertions
-            total_deletions += deletions
+            commit_insertions += patch.line_stats[1]
+            commit_deletions += patch.line_stats[2]
+
+        total_insertions += commit_insertions
+        total_deletions += commit_deletions
 
         if args.verbose:
             short_message = commit.message.split('\n')[0]
-            print '[' + commit.author.name + ']', short_hash(commit), short_message
-            print '+' + str(diff.stats.insertions), '-' + str(diff.stats.deletions)
+            print '[' + commit.author.name + ']', datetime.fromtimestamp(commit.commit_time), short_hash(commit), short_message
+            print '+' + str(commit_insertions), '-' + str(commit_deletions)
 
         bar.update()
 
