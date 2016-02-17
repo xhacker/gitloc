@@ -13,7 +13,7 @@ from pygit2 import GIT_SORT_TOPOLOGICAL, GIT_SORT_REVERSE
 
 
 def short_hash(commit):
-    return str(commit.tree_id)[:6]
+    return str(commit.id)[:6]
 
 
 def main():
